@@ -4,7 +4,7 @@
 #######################################################
 
 # Main working directory
-workdir=/home/chetan/Psycho/Syntactic-Evaluation-using-Critical-Region-Surprisal/LM_syneval
+workdir=/home/chetan/Psycho/CP_Project
 
 # Directory where the Pytorch word language model code lives (with modifications for the multitask LMs)
 lm_dir=$workdir/word-language-model
