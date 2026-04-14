@@ -1,11 +1,8 @@
-"""
-Utility functions for GPT-2 evaluation
-"""
 import torch
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 def load_gpt2_model(model_name='gpt2', device='cuda'):
-    """Load GPT-2 model and tokenizer."""
+
     tokenizer = GPT2Tokenizer.from_pretrained(model_name)
     model = GPT2LMHeadModel.from_pretrained(model_name)
     model.to(device)
@@ -13,14 +10,10 @@ def load_gpt2_model(model_name='gpt2', device='cuda'):
     return model, tokenizer
 
 def score_sentence(model, tokenizer, sentence, device='cuda'):
-    """
-    Score a sentence using GPT-2.
-    Returns total log probability and per-token scores.
-    """
+    
     if not sentence.strip():
         return 0.0, []
     
-    # Ensure sentence ends with period
     if not sentence.strip().endswith('.'):
         sentence = sentence.strip() + ' .'
     else:
@@ -44,19 +37,14 @@ def score_sentence(model, tokenizer, sentence, device='cuda'):
     return total_score, token_log_probs
 
 def format_token_scores(tokens, scores):
-    """
-    Format token-level scores for display.
-    Returns a formatted string showing each token with its score.
-    """
+    
     output = []
     for token, score in zip(tokens, scores):
         output.append(f"{token:15} {score:8.4f}")
     return '\n'.join(output)
 
 def compare_sentences(model, tokenizer, sent1, sent2, device='cuda', verbose=True):
-    """
-    Compare two sentences and return which one has higher probability.
-    """
+    
     score1, tokens1 = score_sentence(model, tokenizer, sent1, device)
     score2, tokens2 = score_sentence(model, tokenizer, sent2, device)
     
@@ -76,26 +64,20 @@ def compare_sentences(model, tokenizer, sent1, sent2, device='cuda', verbose=Tru
     return score1 > score2, score1, score2
 
 def batch_score_sentences(model, tokenizer, sentences, device='cuda', batch_size=32):
-    """
-    Score multiple sentences efficiently in batches.
-    Returns list of (total_score, token_scores) tuples.
-    """
+    
     results = []
     
     for i in range(0, len(sentences), batch_size):
         batch = sentences[i:i+batch_size]
         
-        # Tokenize batch
         encoded = [tokenizer.encode(s.strip() if s.strip().endswith('.') else s.strip() + ' .') 
                    for s in batch]
         
-        # Pad to same length
         max_len = max(len(e) for e in encoded)
         padded = []
         for e in encoded:
             padded.append(e + [tokenizer.eos_token_id] * (max_len - len(e)))
         
-        # Score
         tokens = torch.tensor(padded).to(device)
         
         with torch.no_grad():

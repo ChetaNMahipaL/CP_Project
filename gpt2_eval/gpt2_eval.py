@@ -39,17 +39,12 @@ class GPT2Evaluator:
         logger.info(f"Model loaded on device: {device}")
     
     def get_sentence_score(self, sentence):
-        """
-        Compute log probability of a sentence using GPT-2.
-        Returns: total_score (sum of log probs), word_scores (list of word-level log probs)
-        """
-        # Ensure string format
+        
         sentence = str(sentence).strip()
         
         if not sentence:
             return 0.0, []
         
-        # Add period if not present
         if not sentence.endswith('.'):
             sentence = sentence + ' .'
         
@@ -59,10 +54,8 @@ class GPT2Evaluator:
             outputs = self.model(tokens, labels=tokens)
             logits = outputs.logits
         
-        # Calculate log probabilities for each token
         log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
         
-        # Get the log probability of each token given its context
         token_log_probs = []
         for i in range(len(tokens[0]) - 1):
             token_id = tokens[0, i + 1]
@@ -74,11 +67,7 @@ class GPT2Evaluator:
         return total_score, token_log_probs
     
     def get_sentence_word_scores(self, sentence):
-        """
-        Get word-level scores for visualization.
-        Returns list of (word, log_prob) tuples.
-        """
-        # Ensure string format
+        
         sentence = str(sentence).strip()
         
         if not sentence:
@@ -108,10 +97,8 @@ class GPT2Evaluator:
         return word_scores
 
 def load_test_sentences(template_dir, tests='all'):
-    """Load test sentences from pickle files."""
     logger.info("Loading test sentences...")
     
-    # Import TestCase from parent src directory
     import sys
     sys.path.insert(0, '../src')
     from template.TestCases import TestCase
@@ -138,7 +125,6 @@ def load_test_sentences(template_dir, tests='all'):
     return all_test_sents
 
 def evaluate_gpt2(evaluator, all_test_sents):
-    """Evaluate GPT-2 on all test sentences."""
     logger.info("Starting evaluation...")
     
     results = {}
@@ -183,16 +169,12 @@ def evaluate_gpt2(evaluator, all_test_sents):
 def main():
     args = parse_args()
     
-    # Create evaluator
     evaluator = GPT2Evaluator(model_name=args.model_name, device=args.device)
     
-    # Load test sentences
     all_test_sents = load_test_sentences(args.template_dir, args.tests)
     
-    # Evaluate
     results = evaluate_gpt2(evaluator, all_test_sents)
     
-    # Save results
     output_path = os.path.join(args.template_dir, args.output_file)
     with open(output_path, 'wb') as f:
         pickle.dump(results, f)
