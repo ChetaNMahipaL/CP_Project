@@ -23,11 +23,20 @@ This enables the model to learn both generic linguistic patterns and more struct
 ### 1. Prerequisites
 
 - PyTorch (with CUDA support if using GPU)
+- dill (for unpickling the Dictionary object from lm_data.bin)
 - The trained multitask LSTM model checkpoint: `models/lstm.pt`
 - The LM data dictionary file: `models/lm_data.bin`
 - Test template files in: `EMNLP2018/templates/`
 
-### 2. Model Files
+### 2. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+The `dill` package is essential for loading the Dictionary object stored in `lm_data.bin`. It was used during model training to serialize the custom Dictionary class.
+
+### 3. Model Files
 
 Make sure you have the following trained model files:
 - `../models/lstm.pt` - The trained multitask LSTM checkpoint
@@ -162,6 +171,23 @@ python ../ngram_eval/compare_ngram_results.py \
 ```
 
 ## Troubleshooting
+
+### Dictionary Loading Errors
+
+If you get errors like `No module named 'data'` or `Can't get attribute 'Dictionary'`:
+
+1. **Install dill**: `pip install dill`
+2. **Verify paths**: Check that `lm_data.bin` is in the correct location (`../models/lm_data.bin`)
+3. **Recreate lm_data.bin**: If the file is corrupted, retrain the model:
+   ```bash
+   cd ../word-language-model
+   python main.py --lm_data ../data/lm_data --ccg_data ../data/ccg_data \
+     --save ../models/lstm.pt --save_lm_data ../models/lm_data.bin
+   ```
+
+The `lm_data.bin` file contains a custom `Dictionary` class that requires:
+- The `data.py` module to be accessible (added to sys.path automatically)
+- `dill` package for proper unpickling
 
 ### Model Loading Issues
 If you encounter errors loading the model:

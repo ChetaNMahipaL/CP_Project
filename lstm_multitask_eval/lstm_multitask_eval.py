@@ -6,6 +6,16 @@ import torch
 import numpy as np
 from tqdm import tqdm
 import sys
+import dill
+
+# Add word-language-model to path BEFORE any imports that might unpickle
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_lm_dir = os.path.join(_script_dir, '../word-language-model')
+if _lm_dir not in sys.path:
+    sys.path.insert(0, _lm_dir)
+
+# Import Dictionary class so it's available when unpickling
+from data import Dictionary
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,22 +51,14 @@ class MultitaskLSTMEvaluator:
         if not os.path.exists(lm_data_path):
             raise FileNotFoundError(f"LM data file not found: {lm_data_path}")
         
-        # Load saved data (contains dictionary and model info)
+        # Load saved data (contains Dictionary object, saved with dill)
         try:
-            self.lm_data = torch.load(lm_data_path, map_location='cpu')
-            logger.info(f"Loaded LM data from {lm_data_path}")
+            self.dictionary = torch.load(lm_data_path, map_location='cpu', pickle_module=dill)
+            logger.info(f"Loaded Dictionary from {lm_data_path}")
+            logger.info(f"Vocabulary size: {len(self.dictionary)}")
         except Exception as e:
             logger.error(f"Failed to load LM data: {e}")
             raise
-        
-        # Extract dictionary from lm_data
-        if hasattr(self.lm_data, '__iter__') and not isinstance(self.lm_data, dict):
-            # If it's iterable but not dict, try to extract dictionary from it
-            # Usually the first element is the dictionary or entire batch
-            self.dictionary = self.lm_data
-            logger.warning("Using lm_data as dictionary - check if this is correct")
-        else:
-            self.dictionary = self.lm_data
         
         # Load checkpoint
         try:
@@ -93,17 +95,18 @@ class MultitaskLSTMEvaluator:
         self.model.to(device)
         self.model.eval()
         logger.info(f"Model loaded on device: {device}")
-        logger.info(f"Vocabulary size: {len(self.dictionary)}")
     
     def sentence_to_indices(self, sentence):
         """Convert sentence string to token indices."""
         words = sentence.strip().lower().split()
         indices = []
         for word in words:
-            if word in self.dictionary:
-                indices.append(self.dictionary[word])
+            if word in self.dictionary.word2idx:
+                indices.append(self.dictionary.word2idx[word])
             else:
-                indices.append(self.dictionary.get('<unk>', 0))
+                # Use <unk> token if word not in vocabulary
+                unk_idx = self.dictionary.word2idx.get('<unk>', 0)
+                indices.append(unk_idx)
         return indices
     
     def get_sentence_score(self, sentence):

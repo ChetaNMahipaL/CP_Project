@@ -2,6 +2,16 @@ import torch
 import os
 import sys
 import logging
+import dill
+
+# Add word-language-model to path
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_lm_dir = os.path.join(_script_dir, '../word-language-model')
+if _lm_dir not in sys.path:
+    sys.path.insert(0, _lm_dir)
+
+# Import Dictionary class so it's available when unpickling
+from data import Dictionary
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -14,15 +24,13 @@ def load_lstm_model(model_path, lm_data_path, device='cuda'):
     if not os.path.exists(lm_data_path):
         raise FileNotFoundError(f"LM data file not found: {lm_data_path}")
     
-    # Load LM data (contains dictionary)
-    lm_data = torch.load(lm_data_path, map_location='cpu')
-    dictionary = lm_data
+    # Load Dictionary (contains dictionary, saved with dill)
+    dictionary = torch.load(lm_data_path, map_location='cpu', pickle_module=dill)
     
     # Load model checkpoint
     checkpoint = torch.load(model_path, map_location='cpu')
     
     # Import model class
-    sys.path.insert(0, '../word-language-model')
     from model import RNNModel
     
     # Reconstruct model
@@ -50,10 +58,11 @@ def sentence_to_indices(sentence, dictionary):
     words = sentence.strip().lower().split()
     indices = []
     for word in words:
-        if word in dictionary:
-            indices.append(dictionary[word])
+        if word in dictionary.word2idx:
+            indices.append(dictionary.word2idx[word])
         else:
-            indices.append(dictionary.get('<unk>', 0))
+            unk_idx = dictionary.word2idx.get('<unk>', 0)
+            indices.append(unk_idx)
     return indices
 
 def score_sentence(model, dictionary, sentence, device='cuda'):
