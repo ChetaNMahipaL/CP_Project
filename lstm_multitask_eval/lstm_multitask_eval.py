@@ -62,14 +62,13 @@ class MultitaskLSTMEvaluator:
         
         # Load checkpoint
         try:
-            checkpoint = torch.load(model_path, map_location='cpu')
+            checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
             logger.info(f"Loaded checkpoint from {model_path}")
         except Exception as e:
             logger.error(f"Failed to load checkpoint: {e}")
             raise
         
         # Import model class
-        sys.path.insert(0, '../word-language-model')
         from model import RNNModel
         
         # Reconstruct model from checkpoint

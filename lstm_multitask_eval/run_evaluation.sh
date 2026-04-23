@@ -9,8 +9,8 @@ echo "==================== LSTM Multitask Evaluation Pipeline ==================
 echo ""
 
 # Check if model exists
-MODEL_FILE="../models/lstm.pt"
-LM_DATA_FILE="../models/lm_data.bin"
+MODEL_FILE="../models/lstm_multi.pt"
+LM_DATA_FILE="../models/lstm_multi.bin"
 TEMPLATE_DIR="../EMNLP2018/templates"
 
 if [ ! -f "$MODEL_FILE" ]; then
@@ -18,7 +18,7 @@ if [ ! -f "$MODEL_FILE" ]; then
     echo "Please train the multitask model first using:"
     echo "  cd ../word-language-model"
     echo "  python main.py --lm_data ../data/lm_data --ccg_data ../data/ccg_data \\"
-    echo "    --save ../models/lstm.pt --save_lm_data ../models/lm_data.bin"
+    echo "    --save ../models/lstm_multi.pt --save_lm_data ../models/lstm_multi.bin"
     exit 1
 fi
 
@@ -88,18 +88,6 @@ echo ""
 echo "✓ Condensed analysis complete"
 echo ""
 
-# Step 4: Analyze - Full
-echo "Step 4: Analyzing results (full with examples)..."
-echo ""
-
-python analyze_lstm_multitask_results.py \
-    --results_file "$TEMPLATE_DIR/lstm_multitask_results.pickle" \
-    --output_dir ../results/lstm_multitask \
-    --mode full
-
-echo ""
-echo "✓ Full analysis complete"
-echo ""
 
 echo "==================== Evaluation Complete ===================="
 echo ""

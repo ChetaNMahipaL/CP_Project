@@ -1,0 +1,32 @@
+
+============================================================
+LSTM MULTITASK EVALUATION RESULTS - OVERALL
+============================================================
+
+Test Case                             Accuracy    Correct
+------------------------------------------------------------
+long_vp_coord                           64.25%        257/400
+npi_across_anim                         51.04%       3675/7200
+npi_across_inanim                       64.76%       5595/8640
+obj_rel_across_anim                     52.37%       5865/11200
+obj_rel_across_inanim                   55.33%       6197/11200
+obj_rel_no_comp_across_anim             50.22%       5625/11200
+obj_rel_no_comp_across_inanim           50.87%       5697/11200
+obj_rel_no_comp_within_anim             78.23%       8762/11200
+obj_rel_no_comp_within_inanim           77.32%       8660/11200
+obj_rel_within_anim                     87.29%       9777/11200
+obj_rel_within_inanim                   85.92%       9623/11200
+prep_anim                               55.27%       9286/16800
+prep_inanim                             63.36%       3548/5600
+reflexive_sent_comp                     82.47%       2771/3360
+reflexives_across                       51.69%      11579/22400
+sent_comp                               99.82%       1677/1680
+simple_agrmt                            98.57%        138/140
+simple_npi_anim                         47.78%         86/180
+simple_npi_inanim                       69.44%        150/216
+simple_reflexives                       80.71%        226/280
+subj_rel                                55.54%       6220/11200
+vp_coord                                90.48%        760/840
+------------------------------------------------------------
+OVERALL                                 63.00%     106174/168536
+============================================================

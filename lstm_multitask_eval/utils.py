@@ -27,11 +27,11 @@ def load_lstm_model(model_path, lm_data_path, device='cuda'):
     # Load Dictionary (contains dictionary, saved with dill)
     dictionary = torch.load(lm_data_path, map_location='cpu', pickle_module=dill)
     
-    # Load model checkpoint
-    checkpoint = torch.load(model_path, map_location='cpu')
-    
     # Import model class
     from model import RNNModel
+    
+    # Load model checkpoint
+    checkpoint = torch.load(model_path, map_location='cpu', weights_only=False)
     
     # Reconstruct model
     if isinstance(checkpoint, dict):
