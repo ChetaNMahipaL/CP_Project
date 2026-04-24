@@ -1,0 +1,32 @@
+
+============================================================
+N-GRAM EVALUATION RESULTS - OVERALL
+============================================================
+
+Test Case                             Accuracy    Correct
+------------------------------------------------------------
+long_vp_coord                           50.00%        200/400
+npi_across_anim                         47.00%       3384/7200
+npi_across_inanim                       52.78%       4560/8640
+obj_rel_across_anim                     50.00%       5600/11200
+obj_rel_across_inanim                   50.00%       5600/11200
+obj_rel_no_comp_across_anim             50.00%       5600/11200
+obj_rel_no_comp_across_inanim           50.00%       5600/11200
+obj_rel_no_comp_within_anim             50.00%       5600/11200
+obj_rel_no_comp_within_inanim           50.00%       5600/11200
+obj_rel_within_anim                     50.00%       5600/11200
+obj_rel_within_inanim                   50.00%       5600/11200
+prep_anim                               50.00%       8400/16800
+prep_inanim                             50.00%       2800/5600
+reflexive_sent_comp                     50.00%       1680/3360
+reflexives_across                       50.00%      11200/22400
+sent_comp                               79.29%       1332/1680
+simple_agrmt                            79.29%        111/140
+simple_npi_anim                         42.22%         76/180
+simple_npi_inanim                       45.83%         99/216
+simple_reflexives                       50.00%        140/280
+subj_rel                                50.00%       5600/11200
+vp_coord                                50.00%        420/840
+------------------------------------------------------------
+OVERALL                                 50.32%      84802/168536
+============================================================
