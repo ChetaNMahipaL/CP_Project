@@ -1,0 +1,15 @@
+
+================================================================================
+H3: REFLEXIVE ASYMMETRY ANALYSIS - N-GRAM (Rosetta Stone Method)
+================================================================================
+
+Target Pronoun Group        Accuracy    Mean ΔS    Std Dev          N
+--------------------------------------------------------------------------------
+herself                       28.57%    -0.1200     0.3629       6510
+himself_themselves            57.14%     0.0400     0.9401      19530
+--------------------------------------------------------------------------------
+
+HYPOTHESIS CHECK:
+Difference in Mean ΔS (Others - Herself): 0.1600
+-> CONCLUSION: 'herself' has a LOWER surprisal magnitude than himself/themselves.
+================================================================================

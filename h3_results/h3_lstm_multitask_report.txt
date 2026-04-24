@@ -1,0 +1,16 @@
+
+================================================================================
+H3: REFLEXIVE ASYMMETRY ANALYSIS (CRITICAL-REGION SURPRISAL)
+================================================================================
+
+Target Pronoun Group        Accuracy    Mean ΔS    Std Dev          N
+--------------------------------------------------------------------------------
+herself                       19.91%    -1.6774     1.8542       6510
+himself_themselves            68.04%     1.0806     2.0766      19530
+--------------------------------------------------------------------------------
+
+HYPOTHESIS CHECK:
+Difference in Mean ΔS (Others - Herself): 2.7579
+-> CONCLUSION: 'herself' has a LOWER surprisal magnitude than himself/themselves.
+-> H3 is SUPPORTED by this data.
+================================================================================
